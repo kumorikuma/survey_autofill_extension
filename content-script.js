@@ -14,10 +14,12 @@
 
 const pageUrl = new URL(window.location.href);
 var surveySource = 'Unknown';
-if (pageUrl.hostname == "opinari.fieldwork.com") {
+if (pageUrl.hostname.includes('opinari.fieldwork.com')) {
   surveySource = 'Fieldwork';
-} else if (pageUrl.hostname == 'www.userinterviews.com') {
+} else if (pageUrl.hostname.includes('userinterviews.com')) {
   surveySource = 'UserInterviews';
+} else if (pageUrl.hostname.includes('surveymonkey.com')) {
+  surveySource = 'SurveyMonkey';
 }
 
 // TODO: Handle "Survey Responses" page better.
@@ -74,6 +76,10 @@ const answerData = {
     label: "employment status",
     value: "Unemployed",
   },
+  'education': {
+    label: "education",
+    value: "Elementary",
+  },
   'marital_status': {
     label: "martial status",
     value: "Single",
@@ -83,7 +89,7 @@ const answerData = {
     value: "PST",
   },
   'valid_ssn': {
-    label: ["valid Social Security Number", "valid US SSN"],
+    label: ["valid Social Security Number", "valid US SSN", "valid SSN"],
     value: "Yes",
   },
   'assistive_technologies': {
@@ -95,8 +101,8 @@ const answerData = {
     value: "No",
   },
   'recent_studies': {
-    label: "When was the last time you participated in a focus group, usability test, or other type of market research?",
-    value: "Within the past 3 months",
+    label: ["participated in a focus group"],
+    value: "3 months",
   }
 };
 
@@ -110,6 +116,8 @@ chrome.storage.local.get(null, (result) => {
   if (Object.keys(result).length == 0) {
     chrome.runtime.sendMessage({"action": "openOptionsPage"});
   }
+
+  // console.log(JSON.stringify(answerData, null, 4));
 });
 
 
@@ -176,9 +184,10 @@ var questions = [];
 function getNextButton() {
   if (surveySource == "Fieldwork") {
     return document.getElementsByClassName("btn-next")[0];
-  }
-  if (surveySource == "UserInterviews") {
+  } else if (surveySource == "UserInterviews") {
     return document.getElementsByClassName("btn-primary")[0];
+  } else if (surveySource == "SurveyMonkey") {
+    return document.getElementsByClassName("next-button")[0];
   }
 }
 
@@ -236,6 +245,14 @@ function handleKeypressSelection(containerElement, index) {
         }
       }
       break;
+    case 'FIELDSET':
+       if (containerElement.getAttribute('data-radio-button-group') == '') { // [SurveyMonkey] Radio Buttons
+        const radioButtons = containerElement.getElementsByClassName('radio-button-container');
+        if (index >= 0 && index < radioButtons.length) {
+          radioButtons[index].getElementsByClassName("radio-button-display")[0].click();
+          selectNextQuestion();
+        }
+      }
     default:
       break;
   }
@@ -334,7 +351,7 @@ function getInputElement(containerElement) {
     }
   }
 
-  if (surveySource == "UserInterviews") {
+  else if (surveySource == "UserInterviews") {
     // Check for an input field
     const field = containerElement.getElementsByClassName("input-group")[0];
     if (field != null) {
@@ -352,6 +369,19 @@ function getInputElement(containerElement) {
     }
   }
 
+  else if (surveySource == "SurveyMonkey") {
+    // Check for an input field
+    const field = containerElement.getElementsByClassName("open-ended-single")[0];
+    if (field != null) {
+      return field.firstChild;
+    }
+    // Check for a radio group
+    const radioGroup = containerElement.querySelectorAll('[data-radio-button-group=""]')[0];
+    if (radioGroup != null) {
+      return radioGroup;
+    }
+  }
+
   return null;
 }
 
@@ -363,8 +393,15 @@ function getQuestionTitle(containerElement) {
     }
   }
 
-  if (surveySource == "UserInterviews") {
+  else if (surveySource == "UserInterviews") {
     const label = containerElement.querySelectorAll(".InputLabel, .InputLegend")[0];
+    if (label != null) {
+      return label.textContent.trim();
+    }
+  }
+
+  else if (surveySource == "SurveyMonkey") {
+    const label = containerElement.getElementsByClassName('question-title-container')[0];
     if (label != null) {
       return label.textContent.trim();
     }
@@ -376,9 +413,7 @@ function getQuestionTitle(containerElement) {
 function getQuestionWrappers() {
   if (surveySource == "Fieldwork") {
     return document.getElementsByClassName('cb-question-item-wrapper-outer');
-  }
-
-  if (surveySource == "UserInterviews") {
+  } else if (surveySource == "UserInterviews") {
     var questions = [];
     // Initial signup page is a bit different
     const signupCard = document.getElementsByClassName('ApplySignUp__Card')[0];
@@ -391,6 +426,8 @@ function getQuestionWrappers() {
       questions = [...questions, ...surveyForm.getElementsByClassName('FormGroup')];
     }
     return questions;
+  } else if (surveySource == "SurveyMonkey") {
+    return document.getElementsByClassName('question-row');
   }
 
   return [];
@@ -510,6 +547,24 @@ function autofillQuestion(element, _value) {
         questionError = `Error: Unsupported input type with tagName=[${element.nodeName}]`;
       }
       break;
+    case 'FIELDSET':
+      if (element.getAttribute("data-radio-button-group") == '') { // [SurveyMonkey] Radio Buttons
+        const radioButtons = element.getElementsByClassName('radio-button-container');
+        var valueSelected = false;
+        for (const radioButton of radioButtons) {
+          const buttonLabel = radioButton.textContent.trim().toLowerCase();
+          if (matchValue(value, buttonLabel)) {
+            radioButton.getElementsByClassName("radio-button-display")[0].click();
+            valueSelected = true;
+            break;
+          }
+        }
+        if (!valueSelected) {
+          questionError = `Error: No radio button found with value=[${value}]`;
+        }
+      } else {
+        questionError = `Error: Unsupported input type with tagName=[${element.nodeName}]`;
+      }
     default:
       questionError = `Error: Unsupported input type with tagName=[${element.nodeName}]`;
       break;

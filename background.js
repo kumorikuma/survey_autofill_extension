@@ -5,6 +5,9 @@ chrome.runtime.onInstalled.addListener(function() {
             	new chrome.declarativeContent.PageStateMatcher({
                 	pageUrl: { hostEquals: 'participate.fieldwork.com' },
             	}),
+                new chrome.declarativeContent.PageStateMatcher({
+                    pageUrl: { hostEquals: 'surveymonkey.com' },
+                }),                
             	new chrome.declarativeContent.PageStateMatcher({
                 	pageUrl: { hostEquals: 'userinterviews.com' },
             	})],

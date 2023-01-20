@@ -1,12 +1,12 @@
 {
-  "name": "Fieldwork Autofill",
+  "name": "Survey Autofill",
   "version": "1.0",
-  "description": "Allows shortcuts for quickly filling out fields in Fieldwork forms",
-  "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "*://*/*"],
+  "description": "Allows shortcuts for quickly filling out fields in surveys on websites like Surveymonkey, Fieldwork, Userinterviews",
+  "permissions": ["declarativeContent", "storage", "*://*/*"],
   "options_page": "options.html",
   "content_scripts": [
      {
-       "matches": ["https://opinari.fieldwork.com/surveys/*", "https://www.userinterviews.com/surveys/*", "https://www.userinterviews.com/projects/*"],
+       "matches": ["https://opinari.fieldwork.com/surveys/*", "https://www.userinterviews.com/surveys/*", "https://www.userinterviews.com/projects/*", "https://www.surveymonkey.com/r/*"],
        "js": ["content-script.js"],
        "all_frames": true
      }
