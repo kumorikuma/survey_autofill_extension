@@ -1,6 +1,6 @@
 # Survey Autofill Chrome Extension
 
-Currently supports surveys from **Fieldwork.com** and **Userinterviews.com**.
+Currently supports surveys from **Fieldwork.com**, **Userinterviews.com**, and **Surveymonkey.com**.
 
 Participating in market research requires filling out a lot of surveys. Even though these companies have all your info, for some reason they want you to fill them in over and over for every survey... This expedites the process by autocompleting portions of the survey, and also adds some handy keyboard shortcuts to fill them out faster :)
 
