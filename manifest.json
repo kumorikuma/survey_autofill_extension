@@ -1,0 +1,38 @@
+{
+  "name": "Fieldwork Autofill",
+  "version": "1.0",
+  "description": "Allows shortcuts for quickly filling out fields in Fieldwork forms",
+  "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "*://*/*"],
+  "options_page": "options.html",
+  "content_scripts": [
+     {
+       "matches": ["https://opinari.fieldwork.com/surveys/*"],
+       "js": ["content-script.js"],
+       "all_frames": true
+     }
+   ],
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/smx_icon_16px.png",
+      "32": "images/smx_icon_32px.png",
+      "48": "images/smx_icon_48px.png",
+      "128": "images/smx_icon_128px.png"
+    }
+  },
+  "commands": {
+    "autofill" : {
+        "suggested_key": {
+            "default": "Alt+Shift+F" 
+        },
+        "description": "Autofill fields"
+    }
+  },
+  "icons": {
+    "16": "images/smx_icon_16px.png",
+    "32": "images/smx_icon_32px.png",
+    "48": "images/smx_icon_48px.png",
+    "128": "images/smx_icon_128px.png"
+  },
+  "manifest_version": 2
+}
