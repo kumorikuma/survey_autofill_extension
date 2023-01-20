@@ -6,18 +6,22 @@
   "options_page": "options.html",
   "content_scripts": [
      {
-       "matches": ["https://opinari.fieldwork.com/surveys/*"],
+       "matches": ["https://opinari.fieldwork.com/surveys/*", "https://www.userinterviews.com/surveys/*", "https://www.userinterviews.com/projects/*"],
        "js": ["content-script.js"],
        "all_frames": true
      }
    ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/smx_icon_16px.png",
-      "32": "images/smx_icon_32px.png",
-      "48": "images/smx_icon_48px.png",
-      "128": "images/smx_icon_128px.png"
+      "16": "images/icon_16px.png",
+      "32": "images/icon_32px.png",
+      "48": "images/icon_48px.png",
+      "128": "images/icon_128px.png"
     }
   },
   "commands": {
@@ -29,10 +33,10 @@
     }
   },
   "icons": {
-    "16": "images/smx_icon_16px.png",
-    "32": "images/smx_icon_32px.png",
-    "48": "images/smx_icon_48px.png",
-    "128": "images/smx_icon_128px.png"
+    "16": "images/icon_16px.png",
+    "32": "images/icon_32px.png",
+    "48": "images/icon_48px.png",
+    "128": "images/icon_128px.png"
   },
   "manifest_version": 2
 }

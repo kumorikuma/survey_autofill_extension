@@ -1,20 +1,75 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <style>
-      button {
-        height: 30px;
-        width: 30px;
-        outline: none;
-        margin: 10px;
+      #loading_spinner {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(0,0,0,.3);
+        border-radius: 50%;
+        border-top-color: #000000;
+        animation: spin 1s ease-in-out infinite;
+        -webkit-animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to { -webkit-transform: rotate(360deg); }
+      }
+
+      @-webkit-keyframes spin {
+        to { -webkit-transform: rotate(360deg); }
       }
     </style>
   </head>
   <body>
-    <div id="buttonDiv">
-    </div>
     <div>
-      <p>Choose a different background color!</p>
+      <h1>Survey Autofill Extension Setup</h1>
+      <p>Currently supports surveys from fieldwork.com and userinterviews.com</p>
+      <p>Fill in any information that you'd like to be filled out automatically and hit submit. If you have a survey open, you will need to refresh the page for the changes to be reflected. Multiple answers can be put for a single field by using commas as a separator, in which case either the first value, or first matching value will be used.</p>
+      <p>When the survey asks for a text input, your direct answer will be autofilled. When a multiple choice answer is prompted, matching options will be automatically selected. Matching options are found using matching by whole word, providing multiple answers per field will help in increasing likelihood of a matching option.</p>
+      <p>All information is stored locally on your computer.</p>
+      <div id="loading_spinner"></div>
+      <form id="main_form" action="">
+        <label>First Name</label><br>
+        <input type="text" id="first_name" placeholder="Jane"><br>
+        <label>Last Name</label><br>
+        <input type="text" id="last_name" placeholder="Doe"><br>
+        <label>Gender</label><br>
+        <input type="text" id="gender" placeholder="Female"><br>
+        <label>Date of Birth (DD/MM/YYYY)</label><br>
+        <input type="text" id="dob" placeholder="01/01/1978"><br>
+        <label>Age</label><br>
+        <input type="text" id="age" placeholder="42"><br>
+        <label>Phone Number</label><br>
+        <input type="text" id="phone_number" placeholder="8675309"><br>
+        <label>Email</label><br>
+        <input type="text" id="email" placeholder="meowmeow@meowmix.com"><br>
+        <label>City</label><br>
+        <input type="text" id="city" placeholder="Cloud 9"><br>
+        <label>State</label><br>
+        <input type="text" id="state" placeholder="California"><br>
+        <label>Zip Code</label><br>
+        <input type="text" id="zip" placeholder="91776"><br>
+        <label>Ethnicity</label><br>
+        <input type="text" id="ethnicity" placeholder="Cat, Tabby Cat"><br>
+        <label>Employment Status</label><br>
+        <input type="text" id="employment_status" placeholder="Funemployed"><br>
+        <label>Highest Level of Education (High School, GED, Phd, Master, Graduate, etc.)</label><br>
+        <input type="text" id="education" placeholder="Elementary"><br>
+        <label>Martial Status</label><br>
+        <input type="text" id="marital_status" placeholder="Never married, single"><br>
+        <label>Time Zone</label><br>
+        <input type="text" id="time_zone" placeholder="PST"><br>
+        <label>Have a valid SSN or Tax ID? (Yes/No)</label><br>
+        <input type="text" id="valid_ssn" placeholder="Yes"><br>
+        <label>Need assistive technologies? (Yes/No)</label><br>
+        <input type="text" id="assistive_technologies" placeholder="No"><br>
+        <label>Have a physical disability? (Yes/No)</label><br>
+        <input type="text" id="physical_disability" placeholder="No"><br>
+        <input type="submit" placeholder="Submit">
+      </form>
     </div>
   </body>
   <script src="options.js"></script>
